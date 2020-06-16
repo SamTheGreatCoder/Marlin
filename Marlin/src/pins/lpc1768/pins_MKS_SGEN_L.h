@@ -41,7 +41,7 @@
 //
 // Servos
 //
-#define SERVO0_PIN                         P1_23  // SERVO P1.23
+//#define SERVO0_PIN                         P1_23  // SERVO P1.23
 #define SERVO1_PIN                         P2_00  // SERVO P2.0
 
 //
@@ -88,16 +88,16 @@
     #define Z_MIN_PIN                      P1_24  // Z+
   #endif
 #else
-  #define Z_MIN_PIN                        P1_25  // Z-
+  #define Z_MIN_PIN                        P1_23  // Z-
   #define Z_MAX_PIN                        P1_24  // Z+
 #endif
 
 //
 // Z Probe (when not Z_MIN_PIN)
 //
-#ifndef Z_MIN_PROBE_PIN
-  #define Z_MIN_PROBE_PIN                  P1_24
-#endif
+//#ifndef Z_MIN_PROBE_PIN
+  //#define Z_MIN_PROBE_PIN                  P1_24
+//#endif
 
 //
 // Steppers
