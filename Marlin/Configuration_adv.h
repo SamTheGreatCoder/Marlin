@@ -299,6 +299,11 @@
   #endif
 #endif
 
+// Extra options for the M114 "Current Position" report
+#define M114_DETAIL         // Use 'M114` for details to check planner calculations
+#define M114_REALTIME       // Real current position based on forward kinematics
+#define M114_LEGACY         // M114 used to synchronize on every call. Enable if needed.
+
 // Show Temperature ADC value
 // Enable for M105 to include ADC values read from temperature sensors.
 #define SHOW_TEMP_ADC_VALUES
@@ -627,6 +632,13 @@
  */
 
 //#define SENSORLESS_BACKOFF_MM  { 2, 2 }     // (mm) Backoff from endstops before sensorless homing
+// Homing hits each endstop, retracts by these distances, then does a slower bump.
+#define X_HOME_BUMP_MM 5
+#define Y_HOME_BUMP_MM 5
+#define Z_HOME_BUMP_MM 2
+#define HOMING_BUMP_DIVISOR { 2, 2, 4 }  // Re-Bump Speed Divisor (Divides the Homing Feedrate)
+#define QUICK_HOME                     // If homing includes X and Y, do a diagonal move initially
+//#define HOMING_BACKOFF_MM { 2, 2, 2 }  // (mm) Move away from the endstops after homing
 
 #define HOMING_BUMP_MM      { 5, 5, 2 }       // (mm) Backoff from endstops after first bump
 #define HOMING_BUMP_DIVISOR { 2, 2, 4 }       // Re-Bump Speed Divisor (Divides the Homing Feedrate)
@@ -1718,7 +1730,7 @@
 #endif
 
 // Support for G5 with XYZE destination and IJPQ offsets. Requires ~2666 bytes.
-//#define BEZIER_CURVE_SUPPORT
+#define BEZIER_CURVE_SUPPORT
 
 /**
  * Direct Stepping
@@ -2038,7 +2050,7 @@
   #define PAUSE_PARK_NO_STEPPER_TIMEOUT           // Enable for XYZ steppers to stay powered on during filament change.
 
   #define PARK_HEAD_ON_PAUSE                    // Park the nozzle during pause and filament change.
-  #define HOME_BEFORE_FILAMENT_CHANGE           // If needed, home before parking for filament change
+  #define HOME_BEFORE_FILAMENT_CHANGE           // Ensure homing has been completed prior to parking for filament change
 
   #define FILAMENT_LOAD_UNLOAD_GCODES           // Add M701/M702 Load/Unload G-codes, plus Load/Unload in the LCD Prepare menu.
   #define FILAMENT_UNLOAD_ALL_EXTRUDERS         // Allow M702 to unload all extruders above a minimum target temp (as set by M302)
@@ -3027,17 +3039,6 @@
    * M200 S0/S1 to disable/enable volumetric extrusion.
    */
   #define VOLUMETRIC_DEFAULT_ON
-
-  //#define VOLUMETRIC_EXTRUDER_LIMIT
-  #if ENABLED(VOLUMETRIC_EXTRUDER_LIMIT)
-    /**
-     * Default volumetric extrusion limit in cubic mm per second (mm^3/sec).
-     * This factory setting applies to all extruders.
-     * Use 'M200 [T<extruder>] L<limit>' to override and 'M502' to reset.
-     * A non-zero value activates Volume-based Extrusion Limiting.
-     */
-    #define DEFAULT_VOLUMETRIC_EXTRUDER_LIMIT 8.00      // (mm^3/sec)
-  #endif
 #endif
 
 /**
@@ -3073,8 +3074,6 @@
 #endif
 
 #define GCODE_CASE_INSENSITIVE  // Accept G-code sent to the firmware in lowercase
-
-#define REPETIER_GCODE_M360     // Add commands originally from Repetier FW
 
 /**
  * CNC G-code options
